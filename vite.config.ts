@@ -10,8 +10,8 @@ export default defineConfig({
       includeAssets: ['apple-touch-icon.png', 'favicon.png'],
       workbox: { globPatterns: ['**/*.{html,js,css,woff2,png,svg}'] },
       manifest: {
-        name: 'Basic Strategy Trainer',
-        short_name: 'BS Trainer',
+        name: 'Blackjack Trainer',
+        short_name: 'BJ Trainer',
         description: 'Practice blackjack basic strategy, online or offline.',
         display: 'standalone',
         start_url: '/',

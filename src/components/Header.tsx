@@ -10,7 +10,7 @@ export function Header() {
   return (
     <header class="stats-header">
       <div class="title px-box">
-        <h1>Basic Strategy Trainer</h1>
+        <h1>Blackjack Trainer</h1>
       </div>
       <div class="tallies">
         <div class="tally accuracy px-box">
