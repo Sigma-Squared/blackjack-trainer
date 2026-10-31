@@ -1,32 +1,15 @@
-details summary {
-  cursor: pointer;
-  list-style: none;
+.chart-panel {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-details summary::-webkit-details-marker {
-  display: none;
-}
-
-details summary::after {
-  content: 'Hide';
-  font-size: 12px;
-  color: var(--muted);
-}
-
-details:not([open]) summary::after {
-  content: 'Show';
+  flex-direction: column;
+  gap: 14px;
 }
 
 .legend {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px 12px;
-  font-size: 12px;
+  gap: 4px 14px;
+  font-size: 19px;
   color: var(--muted);
-  margin-bottom: 10px;
 }
 
 .legend span {
@@ -36,69 +19,53 @@ details:not([open]) summary::after {
 }
 
 .legend i {
+  display: inline-block;
   width: 14px;
   height: 14px;
-  border-radius: 3px;
-  display: inline-block;
-}
-
-.charts {
-  display: grid;
-  gap: 14px;
-}
-
-.tw {
-  overflow-x: auto;
 }
 
 table.chart {
+  width: 100%;
   border-collapse: separate;
   border-spacing: 2px;
-  font-family: var(--f-mono);
-  font-size: 11px;
-  margin: 0 auto;
+  font-size: 20px;
+  table-layout: fixed;
 }
 
 table.chart caption {
-  text-align: left;
-  font-family: var(--f-body);
-  font-size: 11px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--muted);
   padding-bottom: 4px;
+  font-size: 24px;
+  text-align: left;
+  color: var(--money);
 }
 
 table.chart th {
+  height: 24px;
+  padding: 0;
+  font-weight: 400;
   color: var(--muted);
-  font-weight: 500;
-  padding: 0 4px;
-  min-width: 24px;
-  height: 22px;
 }
 
 table.chart th[scope='row'] {
+  padding-right: 4px;
   text-align: right;
-  padding-right: 6px;
   white-space: nowrap;
 }
 
 table.chart td {
-  width: 28px;
-  height: 22px;
+  height: 24px;
+  padding: 0;
   text-align: center;
-  border-radius: 3px;
-  font-weight: 700;
-  color: var(--ink);
+  color: var(--text);
+  text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.45);
 }
 
 td.H {
-  background: var(--c-h);
-  color: var(--ivory);
+  background: color-mix(in srgb, var(--c-h) 55%, var(--panel-dark));
 }
 
 td.S {
-  background: var(--c-s);
+  background: color-mix(in srgb, var(--c-s) 70%, var(--panel-dark));
 }
 
 td.D {
@@ -110,26 +77,23 @@ td.Ds {
 }
 
 td.P {
-  background: var(--c-p);
-  color: var(--ivory);
+  background: color-mix(in srgb, var(--c-p) 75%, var(--panel-dark));
 }
 
 td.R {
   background: var(--c-r);
-  color: var(--ivory);
 }
 
 td.hl {
-  outline: 2px solid var(--ivory);
-  outline-offset: 1px;
   position: relative;
   z-index: 1;
-  animation: pulse 1.2s ease 2;
+  outline: var(--px) solid var(--text);
+  animation: pulse 0.8s steps(2) 3;
 }
 
 @keyframes pulse {
   50% {
-    outline-color: transparent;
+    outline-color: var(--money);
   }
 }
 

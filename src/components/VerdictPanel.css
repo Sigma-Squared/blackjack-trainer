@@ -1,62 +1,60 @@
 .verdict {
-  border-radius: 12px;
-  padding: 12px 14px;
-  background: var(--panel);
-  border: 1px solid var(--line);
+  --box: var(--panel-dark);
   display: grid;
   grid-template-columns: auto 1fr;
   gap: 2px 12px;
   align-items: start;
+  padding: 8px 10px 10px;
+  min-height: 62px;
+  box-sizing: border-box;
 }
 
 .verdict .mark {
   grid-row: span 2;
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
   display: grid;
   place-items: center;
-  font-weight: 700;
-  font-size: 16px;
-  color: var(--page);
+  width: 44px;
+  height: 44px;
+  font-size: 28px;
+  color: var(--text);
+  background: var(--panel-hi);
+  text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.45);
 }
 
 .verdict.ok {
-  border-color: rgba(127, 209, 155, 0.45);
+  --box-edge: var(--green);
 }
 
 .verdict.ok .mark {
-  background: var(--good);
+  background: var(--green);
 }
 
 .verdict.no {
-  border-color: rgba(240, 143, 114, 0.5);
+  --box-edge: var(--red);
 }
 
 .verdict.no .mark {
-  background: var(--bad);
-}
-
-.verdict.idle .mark {
-  background: var(--panel-2);
-  color: var(--muted);
+  background: var(--red);
 }
 
 .verdict h2 {
-  margin: 0;
-  font-size: 15px;
-  font-weight: 600;
+  font-size: 26px;
+  line-height: 1;
   min-width: 0;
 }
 
 .verdict p {
-  margin: 0;
-  font-size: 13px;
+  font-size: 20px;
+  line-height: 1.05;
   color: var(--muted);
   min-width: 0;
 }
 
 .verdict strong {
-  color: var(--ivory);
-  font-weight: 600;
+  font-weight: 400;
+  color: var(--money);
+}
+
+.verdict.idle strong {
+  color: inherit;
 }

@@ -1,30 +1,30 @@
 .log {
   list-style: none;
-  margin: 0;
-  padding: 0;
   display: grid;
   gap: 8px;
+  margin: 6px 0 0;
+  padding: 0;
 }
 
 .log li {
-  font-size: 13px;
-  border-left: 3px solid var(--bad);
-  padding: 2px 0 2px 10px;
   min-width: 0;
+  padding: 3px 8px 5px;
+  background: var(--panel);
+  border-left: calc(var(--px) * 2) solid var(--red);
 }
 
 .log li b {
-  font-weight: 600;
+  font-size: 22px;
+  font-weight: 400;
 }
 
 .log li span {
-  color: var(--muted);
   display: block;
-  font-size: 12px;
+  font-size: 19px;
+  color: var(--muted);
 }
 
 .log li.empty {
   color: var(--muted);
-  border: 0;
-  padding: 0;
+  border-left-color: var(--panel-hi);
 }

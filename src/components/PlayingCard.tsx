@@ -1,5 +1,11 @@
-import { createEffect, createSignal, on, Show } from 'solid-js';
-import { isRed } from '../engine/cards';
+import { createEffect, createSignal, on } from 'solid-js';
+import {
+  ANIMATION_LOOP_MS,
+  animatedRowPosition,
+  CARD_BACK_POSITION,
+  cardName,
+  cardPosition,
+} from '../cardSprites';
 import type { Card } from '../engine/types';
 import './PlayingCard.css';
 
@@ -10,8 +16,21 @@ interface Props {
   delay?: number;
 }
 
+/** Runs the card's frames off the page clock, so every card on the table shows the same frame. */
+function syncFrames(element: HTMLElement) {
+  for (const animation of element.getAnimations({ subtree: true })) {
+    if (animation instanceof CSSAnimation && animation.animationName === 'frames') {
+      animation.startTime = 0;
+    }
+  }
+}
+
 export function PlayingCard(props: Props) {
+  let element!: HTMLDivElement;
   const [flipped, setFlipped] = createSignal(false);
+  const frameRow = () => animatedRowPosition(props.card);
+  const animated = () => !props.faceDown && frameRow() !== null;
+
   createEffect(
     on(
       () => props.faceDown,
@@ -20,31 +39,23 @@ export function PlayingCard(props: Props) {
       },
     ),
   );
-
-  const corner = (
-    <>
-      {props.card.rank}
-      <i>{props.card.suit}</i>
-    </>
-  );
+  createEffect(() => {
+    if (animated()) syncFrames(element);
+  });
 
   return (
     <div
+      ref={element}
       class="card"
-      classList={{
-        back: props.faceDown,
-        red: !props.faceDown && isRed(props.card),
-        new: !flipped(),
-        flip: flipped(),
+      classList={{ new: !flipped(), flip: flipped(), animated: animated() }}
+      style={{
+        'background-position': props.faceDown ? CARD_BACK_POSITION : cardPosition(props.card),
+        'animation-delay': `${flipped() ? 0 : (props.delay ?? 0)}ms`,
+        '--frame-row': frameRow() ?? undefined,
+        '--frame-loop': `${ANIMATION_LOOP_MS}ms`,
       }}
-      style={{ 'animation-delay': `${flipped() ? 0 : (props.delay ?? 0)}ms` }}
-      aria-label={props.faceDown ? 'Face-down card' : `${props.card.rank} of ${props.card.suit}`}
-    >
-      <Show when={!props.faceDown}>
-        <span class="cr">{corner}</span>
-        <span class="cs">{props.card.suit}</span>
-        <span class="cr br">{corner}</span>
-      </Show>
-    </div>
+      role="img"
+      aria-label={props.faceDown ? 'Face-down card' : cardName(props.card)}
+    />
   );
 }

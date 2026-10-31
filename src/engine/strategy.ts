@@ -57,6 +57,7 @@ export function allowedActions(
   hand: Hand | undefined,
   bankroll: number,
   handCount: number,
+  surrenderOffered = true,
 ): AllowedActions {
   if (!hand || hand.done) return {};
   const twoCards = hand.cards.length === 2;
@@ -67,7 +68,7 @@ export function allowedActions(
     S: true,
     D: twoCards && canAffordBet,
     P: isPair && handCount < MAX_HANDS && canAffordBet,
-    R: twoCards && handCount === 1 && !hand.split,
+    R: surrenderOffered && twoCards && handCount === 1 && !hand.split,
   };
 }
 

@@ -1,76 +1,83 @@
 .table {
-  position: relative;
-  background: radial-gradient(ellipse 90% 70% at 50% 0%, var(--felt-hi), var(--felt) 75%);
-  border: 10px solid var(--rail);
-  border-top-color: var(--rail-hi);
-  border-radius: 18px 18px 46% 46% / 18px 18px 110px 110px;
-  padding: 16px 14px 40px;
-  box-shadow:
-    inset 0 0 0 2px var(--felt-line),
-    inset 0 10px 40px rgba(0, 0, 0, 0.35),
-    0 12px 30px rgba(0, 0, 0, 0.4);
+  --box: color-mix(in srgb, var(--felt) 10%, transparent);
+  --box-edge: var(--felt-dark);
+  --slot: var(--cw);
+  flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6px;
-  min-height: 380px;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px;
+}
+
+.seat {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
 }
 
 .zone-label {
-  font-size: 10px;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--brass-dim);
   display: flex;
   gap: 8px;
   align-items: center;
+  font-size: 20px;
+  color: var(--text);
+  text-shadow: 2px 2px 0 var(--edge);
 }
 
 .total {
-  font-family: var(--f-mono);
-  font-size: 12px;
-  background: rgba(0, 0, 0, 0.35);
-  color: var(--ivory);
-  padding: 2px 8px;
-  border-radius: 99px;
-  font-variant-numeric: tabular-nums;
+  padding: 1px 8px 2px;
+  font-size: 20px;
+  color: var(--text);
+  text-shadow: none;
+  background: var(--edge);
 }
 
 .cards {
   display: flex;
   min-height: calc(var(--cw) * 1.4);
-  padding: 4px 0;
 }
 
 .cards .card + .card {
   margin-left: calc(var(--cw) * -0.42);
 }
 
-.arc {
-  width: min(100%, 420px);
-  height: auto;
-  margin: 2px 0;
+/* Longer hands fan tighter, down to just the rank corners, so they always fit the column. */
+.cards:has(.card:nth-child(3)) .card + .card {
+  margin-left: calc(var(--cw) * -0.6);
 }
 
-.arc text {
-  font-family: var(--f-display);
-  fill: var(--brass);
-  letter-spacing: 0.12em;
+.cards:has(.card:nth-child(4)) .card + .card {
+  margin-left: calc(var(--cw) * -0.72);
 }
 
-.arc .small {
-  font-family: var(--f-body);
-  font-weight: 600;
-  font-size: 9px;
-  fill: var(--brass-dim);
-  letter-spacing: 0.11em;
+.cards:has(.card:nth-child(5)) .card + .card {
+  margin-left: calc(var(--cw) * -0.84);
+}
+
+.cards:has(.card:nth-child(7)) .card + .card {
+  margin-left: calc(var(--cw) * -0.88);
+}
+
+/* Split hands share the space, so they drop to the sprites' native size. */
+.hands:has(.hand:nth-child(2)) {
+  --cw: 90px;
+}
+
+/* Holds the dealer and player apart. */
+.seat-gap {
+  height: 56px;
 }
 
 .hands {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 10px 14px;
+  gap: 6px 14px;
+  min-height: calc(var(--slot) * 1.4 + 32px);
 }
 
 .hand {
@@ -78,72 +85,66 @@
   flex-direction: column;
   align-items: center;
   gap: 4px;
-  padding: 6px 8px 8px;
-  border-radius: 12px;
-  border: 1px solid transparent;
-  transition:
-    border-color 0.2s,
-    background 0.2s;
+  padding: 0 4px 2px;
+  outline: var(--px) solid transparent;
 }
 
 .hand.active {
-  border-color: var(--brass);
-  background: rgba(214, 178, 94, 0.08);
+  outline-color: var(--money);
+  background: rgba(247, 201, 72, 0.1);
 }
 
 .hand-foot {
   display: flex;
   gap: 6px;
   align-items: center;
-  font-size: 12px;
+  font-size: 20px;
 }
 
 .bet {
-  font-family: var(--f-mono);
-  font-size: 11px;
+  padding: 1px 7px 2px;
+  font-size: 20px;
   color: var(--ink);
-  background: var(--brass);
-  border-radius: 99px;
-  padding: 2px 8px;
-  font-variant-numeric: tabular-nums;
+  background: var(--money);
 }
 
 .res {
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  padding: 2px 7px;
-  border-radius: 4px;
-  background: rgba(0, 0, 0, 0.4);
+  padding: 1px 7px 2px;
+  font-size: 20px;
+  color: var(--text);
+  text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.45);
 }
 
 .res.win,
 .res.bj {
-  color: var(--good);
+  background: var(--green);
 }
 
 .res.lose,
 .res.bust {
-  color: var(--bad);
+  background: var(--red);
 }
 
 .res.push,
 .res.surrender {
-  color: var(--muted);
+  background: var(--panel-hi);
 }
 
 .msg {
-  min-height: 1.4em;
-  font-size: 13px;
-  color: var(--ivory);
+  min-height: 1.1em;
+  font-size: 20px;
   text-align: center;
-  opacity: 0.9;
+  text-shadow: 2px 2px 0 var(--edge);
 }
 
-@media (max-width: 420px) {
+@media (max-width: 1023px) {
   .table {
-    padding: 14px 8px 36px;
-    border-width: 8px;
+    flex: none;
+    gap: 4px;
+    padding: 5px;
+  }
+
+  .seat-gap {
+    display: none;
   }
 }

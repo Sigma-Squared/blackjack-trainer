@@ -35,6 +35,7 @@ export function gradeChoice(game: GameState, choice: Choice, best: Choice, decis
   const label = decisionLabel(decision);
   game.lastCell = chartCell(decision);
   game.verdict = { correct, choice, best, label, why: explain(best, decision) };
+  game.verdictStale = false;
   if (!correct) {
     stats.log.unshift({ label, choice, best });
     stats.log = stats.log.slice(0, MISTAKE_LOG_SIZE);

@@ -1,4 +1,4 @@
-import { createMemo, For, Show } from 'solid-js';
+import { createMemo, For, Match, Switch } from 'solid-js';
 import { cardValue } from '../engine/cards';
 import { allowedForCurrentHand, currentHand } from '../engine/round';
 import { bestAction } from '../engine/strategy';
@@ -17,10 +17,14 @@ const ACTIONS: { action: Action; label: string }[] = [
 function InsuranceButtons() {
   return (
     <div class="ins">
-      <button class="act" onClick={() => answerInsurance(true)}>
+      <button class="act px-btn take" onClick={() => answerInsurance(true)}>
         Take insurance<kbd>Y</kbd>
       </button>
-      <button class="act" classList={{ rec: game.hint }} onClick={() => answerInsurance(false)}>
+      <button
+        class="act px-btn decline"
+        classList={{ rec: game.hint }}
+        onClick={() => answerInsurance(false)}
+      >
         No insurance<kbd>N</kbd>
       </button>
     </div>
@@ -28,24 +32,25 @@ function InsuranceButtons() {
 }
 
 function MoveButtons() {
-  const allowed = createMemo(() => (game.phase === 'play' ? allowedForCurrentHand(game) : {}));
+  const allowed = createMemo(() => allowedForCurrentHand(game));
+  const moves = () => ACTIONS.filter(({ action }) => action !== 'R' || game.rules.surrender);
   const recommended = createMemo(() => {
     const hand = currentHand(game);
-    if (game.phase !== 'play' || !game.hint || !hand) return null;
+    if (!game.hint || !hand) return null;
     return bestAction(hand, cardValue(game.dealer[0]), allowed()).best;
   });
 
   return (
     <div class="actions">
-      <For each={ACTIONS}>
+      <For each={moves()}>
         {({ action, label }) => (
           <button
-            class="act"
+            class="act px-btn"
             classList={{ rec: recommended() === action }}
+            style={{ '--action': `var(--c-${action.toLowerCase()})` }}
             disabled={!allowed()[action]}
             onClick={() => playAction(action)}
           >
-            <span class="sw" style={{ background: `var(--c-${action.toLowerCase()})` }} />
             {label}
             <kbd>{action}</kbd>
           </button>
@@ -57,15 +62,21 @@ function MoveButtons() {
 
 export function ActionBar() {
   return (
-    <>
-      <Show when={game.phase === 'insurance'} fallback={<MoveButtons />}>
-        <InsuranceButtons />
-      </Show>
-      <Show when={game.phase === 'done' || game.phase === 'idle'}>
-        <button class="deal" onClick={deal}>
-          Deal next hand <span class="deal-key">· Space</span>
-        </button>
-      </Show>
-    </>
+    <div class="controls">
+      <Switch
+        fallback={
+          <button class="deal px-btn" onClick={deal}>
+            Deal next hand <span class="deal-key">Space</span>
+          </button>
+        }
+      >
+        <Match when={game.phase === 'insurance'}>
+          <InsuranceButtons />
+        </Match>
+        <Match when={game.phase === 'play'}>
+          <MoveButtons />
+        </Match>
+      </Switch>
+    </div>
   );
 }

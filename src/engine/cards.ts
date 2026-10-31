@@ -46,8 +46,6 @@ export function handTotal(cards: Card[]): { total: number; soft: boolean } {
 
 export const isBlackjack = (cards: Card[]) => cards.length === 2 && handTotal(cards).total === 21;
 
-export const isRed = (card: Card) => card.suit === '♥' || card.suit === '♦';
-
 /** The label for a dealer upcard value: 11 is shown as an ace. */
 export const upcardLabel = (upcard: number) => (upcard === 11 ? 'A' : String(upcard));
 

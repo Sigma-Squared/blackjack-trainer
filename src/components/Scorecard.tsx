@@ -22,7 +22,7 @@ function CategoryBar(props: { kind: DecisionKind; name: string }) {
         <div class="fill" style={{ width: `${percent()}%` }} />
       </div>
       <span class="v">
-        {graded() ? `${percent()}%` : '—'}{' '}
+        {graded() ? `${percent()}%` : '--'}{' '}
         <span class="count">
           {correct()}/{graded()}
         </span>
@@ -38,8 +38,8 @@ export function Scorecard() {
   };
 
   return (
-    <section class="panel">
-      <h3>Scorecard</h3>
+    <section class="drawer-section">
+      <h3 class="section-title">Scorecard</h3>
       <p class="sub">{summary()}</p>
       <div class="bars">
         <For each={CATEGORIES}>{(category) => <CategoryBar {...category} />}</For>

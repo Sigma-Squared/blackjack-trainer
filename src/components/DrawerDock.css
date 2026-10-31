@@ -1,0 +1,134 @@
+.dock {
+  --drawer-size: min(450px, calc(100vw - 56px));
+}
+
+.drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  width: var(--drawer-size);
+  background: var(--panel-dark);
+  box-shadow: calc(var(--px) * -2) 0 0 var(--panel-hi), calc(var(--px) * -3) 0 0 var(--edge);
+  transform: translateX(calc(100% + var(--px) * 3));
+  transition: transform 0.2s steps(6);
+}
+
+.drawer.open {
+  transform: none;
+}
+
+.drawer-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 16px 10px;
+}
+
+.drawer-close {
+  --btn: var(--red);
+  width: 34px;
+  height: 30px;
+  padding: 0;
+  font-size: 24px;
+}
+
+.drawer-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  overflow-y: auto;
+  padding: 4px 16px calc(24px + env(safe-area-inset-bottom, 0px));
+}
+
+/* The tabs ride along the edge of the open drawer. */
+.drawer-tabs {
+  position: fixed;
+  top: 50%;
+  right: 0;
+  z-index: 21;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  transform: translateY(-50%);
+  transition: transform 0.2s steps(6);
+}
+
+.has-open .drawer-tabs {
+  transform: translate(calc(var(--drawer-size) * -1 - var(--px) * 3), -50%);
+}
+
+.drawer-tab {
+  --btn: var(--panel-hi);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 5px 12px 6px;
+  font-size: 24px;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+}
+
+.drawer-tab:active:not(:disabled) {
+  transform: rotate(180deg) translateX(calc(var(--px) * 2));
+}
+
+.drawer-tab[aria-expanded='true'] {
+  --btn: var(--gold);
+}
+
+.drawer-tab kbd {
+  font-size: 18px;
+  opacity: 0.7;
+}
+
+/* On a phone, the drawers come up from the bottom edge instead. */
+@media (max-width: 1023px) {
+  .dock {
+    --drawer-size: 74dvh;
+  }
+
+  .drawer {
+    top: auto;
+    left: 0;
+    width: auto;
+    height: var(--drawer-size);
+    box-shadow: 0 calc(var(--px) * -2) 0 var(--panel-hi), 0 calc(var(--px) * -3) 0 var(--edge);
+    transform: translateY(calc(100% + var(--px) * 3));
+  }
+
+  .drawer-tabs {
+    top: auto;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    flex-direction: row;
+    gap: 12px;
+    padding: 8px 14px calc(12px + env(safe-area-inset-bottom, 0px));
+    background: var(--panel-dark);
+    box-shadow: 0 calc(var(--px) * -1) 0 var(--edge);
+    transform: none;
+  }
+
+  .has-open .drawer-tabs {
+    visibility: hidden;
+    transform: none;
+  }
+
+  .drawer-tab {
+    flex: 1;
+    justify-content: center;
+    padding: 6px;
+    writing-mode: horizontal-tb;
+    transform: none;
+  }
+
+  .drawer-tab:active:not(:disabled) {
+    transform: translateY(calc(var(--px) * 2));
+  }
+}

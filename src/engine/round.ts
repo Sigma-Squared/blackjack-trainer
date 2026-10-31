@@ -6,11 +6,23 @@ import { money } from '../format';
 import { buildShoe, cardValue, cutPosition, handTotal, isBlackjack } from './cards';
 import { freshStats, gradeChoice } from './stats';
 import { allowedActions, bestAction } from './strategy';
-import type { Action, Card, GameState, Hand, SavedProgress } from './types';
+import type {
+  Action,
+  BlackjackPayout,
+  Card,
+  GameState,
+  Hand,
+  Rules,
+  SavedProgress,
+} from './types';
 
 const DEALER_STANDS_ON = 17;
 const REBUY_AMOUNT = 1000;
 const DEFAULT_HEADING = 'Make your first decision';
+const DEFAULT_RULES: Rules = { surrender: false, blackjackPayout: '3:2', insurance: true };
+const BLACKJACK_WINNINGS: Record<BlackjackPayout, number> = { '3:2': 1.5, '6:5': 1.2 };
+
+export const payoutLabel = (rules: Rules) => rules.blackjackPayout.replace(':', ' to ');
 
 export function newGame(saved?: Partial<SavedProgress>): GameState {
   const shoe = buildShoe();
@@ -27,9 +39,11 @@ export function newGame(saved?: Partial<SavedProgress>): GameState {
     phase: 'idle',
     insured: false,
     hint: saved?.hint ?? false,
+    rules: saved?.rules ?? { ...DEFAULT_RULES },
     message: '',
     stats: saved?.stats ?? freshStats(),
     verdict: null,
+    verdictStale: false,
     idleHeading: DEFAULT_HEADING,
     lastCell: null,
   };
@@ -41,7 +55,7 @@ const upcardValue = (game: GameState) => cardValue(game.dealer[0]);
 export const currentHand = (game: GameState): Hand | undefined => game.hands[game.active];
 
 export const allowedForCurrentHand = (game: GameState) =>
-  allowedActions(currentHand(game), game.bankroll, game.hands.length);
+  allowedActions(currentHand(game), game.bankroll, game.hands.length, game.rules.surrender);
 
 export const isRoundInProgress = (game: GameState) =>
   game.phase === 'play' || game.phase === 'insurance';
@@ -71,9 +85,10 @@ export function deal(game: GameState) {
   game.holeHidden = true;
   game.active = 0;
   game.insured = false;
+  game.verdictStale = true;
   game.message = shuffleNote;
 
-  if (upcardValue(game) === 11) {
+  if (upcardValue(game) === 11 && game.rules.insurance) {
     game.phase = 'insurance';
     game.message = `${shuffleNote}Dealer shows an ace.`;
     return;
@@ -122,8 +137,8 @@ function peekAndStartPlay(game: GameState) {
     game.holeHidden = false;
     hand.result = 'bj';
     hand.done = true;
-    game.bankroll += hand.bet * 2.5;
-    endRound(game, `${peekNote}Blackjack! Paid 3 to 2.`);
+    game.bankroll += hand.bet + hand.bet * BLACKJACK_WINNINGS[game.rules.blackjackPayout];
+    endRound(game, `${peekNote}Blackjack! Paid ${payoutLabel(game.rules)}.`);
     return;
   }
 
@@ -257,6 +272,22 @@ export function setBet(game: GameState, bet: number) {
 
 export function toggleHint(game: GameState) {
   game.hint = !game.hint;
+}
+
+export function setSurrender(game: GameState, offered: boolean) {
+  game.rules.surrender = offered;
+}
+
+export function setBlackjackPayout(game: GameState, payout: BlackjackPayout) {
+  game.rules.blackjackPayout = payout;
+}
+
+export function setInsurance(game: GameState, offered: boolean) {
+  game.rules.insurance = offered;
+  if (!offered && game.phase === 'insurance') {
+    game.message = '';
+    peekAndStartPlay(game);
+  }
 }
 
 export function rebuy(game: GameState) {

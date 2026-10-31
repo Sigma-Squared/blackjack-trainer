@@ -63,11 +63,21 @@ export interface Stats {
   log: Mistake[];
 }
 
+export type BlackjackPayout = '3:2' | '6:5';
+
+export interface Rules {
+  surrender: boolean;
+  blackjackPayout: BlackjackPayout;
+  /** Whether insurance is offered against a dealer ace. It always pays 2 to 1. */
+  insurance: boolean;
+}
+
 export interface SavedProgress {
   stats: Stats;
   bankroll: number;
   bet: number;
   hint: boolean;
+  rules: Rules;
 }
 
 export interface GameState {
@@ -85,9 +95,12 @@ export interface GameState {
   phase: Phase;
   insured: boolean;
   hint: boolean;
+  rules: Rules;
   message: string;
   stats: Stats;
   verdict: Verdict | null;
+  /** The verdict is from an earlier hand: no decision has been made in this one yet. */
+  verdictStale: boolean;
   idleHeading: string;
   /** Strategy chart cell of the latest decision. */
   lastCell: string | null;

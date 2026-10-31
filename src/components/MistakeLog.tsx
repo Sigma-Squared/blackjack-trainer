@@ -5,8 +5,8 @@ import './MistakeLog.css';
 
 export function MistakeLog() {
   return (
-    <section class="panel">
-      <h3>Recent mistakes</h3>
+    <section class="drawer-section">
+      <h3 class="section-title">Recent mistakes</h3>
       <p class="sub">Your last 12 misplays, newest first.</p>
       <ul class="log">
         <For each={game.stats.log} fallback={<li class="empty">No mistakes yet.</li>}>

@@ -1,0 +1,22 @@
+.background {
+  position: fixed;
+  inset: 0;
+  background: var(--page);
+}
+
+.background canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  image-rendering: pixelated;
+}
+
+/* Scanlines and a dark vignette. These sit behind the UI, so the cards stay clean. */
+.background::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.16) 0 2px, transparent 2px 4px),
+    radial-gradient(ellipse at center, transparent 45%, rgba(0, 0, 0, 0.55) 100%);
+}

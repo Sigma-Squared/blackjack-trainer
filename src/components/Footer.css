@@ -1,28 +1,38 @@
 .foot {
   display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 12px;
+  flex-direction: column;
+  gap: 9px;
+  font-size: 20px;
   color: var(--muted);
 }
 
-.foot-buttons {
-  display: flex;
-  gap: 8px;
+.credit {
+  margin-top: 8px;
+  font-size: 18px;
 }
 
-.ghost {
-  background: none;
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  padding: 6px 10px;
-  font-size: 12px;
-  color: var(--muted);
+.credit a {
+  color: inherit;
 }
 
-.ghost.warn {
-  border-color: var(--bad);
-  color: var(--bad);
+.credit a:hover {
+  color: var(--text);
+}
+
+.confirm {
+  padding: 5px 10px 6px;
+  font-size: 22px;
+}
+
+.confirm.warn {
+  --btn: var(--red);
+}
+
+@media (max-width: 1023px) {
+  .foot {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+  }
 }

@@ -1,8 +1,8 @@
-import { createSelector, For } from 'solid-js';
+import { createEffect, createSelector, For } from 'solid-js';
 import { upcardLabel } from '../engine/cards';
 import { hardCode, pairCode, softCode } from '../engine/strategy';
 import type { ChartCode } from '../engine/types';
-import { game } from '../store';
+import { game, openDrawer } from '../store';
 import './StrategyChart.css';
 
 const UPCARDS = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
@@ -16,7 +16,7 @@ interface ChartTable {
   caption: string;
   kind: string;
   rows: ChartRow[];
-  code: (key: number, upcard: number) => ChartCode;
+  code: (key: number, upcard: number, surrender: boolean) => ChartCode;
 }
 
 const totalRow = (total: number): ChartRow => ({ key: total, label: String(total) });
@@ -32,11 +32,11 @@ const TABLES: ChartTable[] = [
     caption: 'Hard totals',
     kind: 'hard',
     rows: [
-      { key: 8, label: '≤8' },
+      { key: 8, label: '8-' },
       ...[9, 10, 11, 12, 13, 14, 15, 16].map(totalRow),
       { key: 17, label: '17+' },
     ],
-    code: (total, upcard) => hardCode(total, upcard),
+    code: (total, upcard, surrender) => hardCode(total, upcard, !surrender),
   },
   {
     caption: 'Soft totals',
@@ -63,49 +63,49 @@ const LEGEND: { swatch: string; text: string }[] = [
 
 function Chart(props: { table: ChartTable; isHighlighted: (cell: string) => boolean }) {
   return (
-    <div class="tw">
-      <table class="chart">
-        <caption>{props.table.caption}</caption>
-        <tbody>
-          <tr>
-            <th />
-            <For each={UPCARDS}>{(upcard) => <th scope="col">{upcardLabel(upcard)}</th>}</For>
-          </tr>
-          <For each={props.table.rows}>
-            {(row) => (
-              <tr>
-                <th scope="row">{row.label}</th>
-                <For each={UPCARDS}>
-                  {(upcard) => {
-                    const code = props.table.code(row.key, upcard);
-                    const cell = `${props.table.kind}-${row.key}-${upcard}`;
-                    return (
-                      <td class={code} classList={{ hl: props.isHighlighted(cell) }}>
-                        {code}
-                      </td>
-                    );
-                  }}
-                </For>
-              </tr>
-            )}
-          </For>
-        </tbody>
-      </table>
-    </div>
+    <table class="chart">
+      <caption>{props.table.caption}</caption>
+      <tbody>
+        <tr>
+          <th />
+          <For each={UPCARDS}>{(upcard) => <th scope="col">{upcardLabel(upcard)}</th>}</For>
+        </tr>
+        <For each={props.table.rows}>
+          {(row) => (
+            <tr>
+              <th scope="row">{row.label}</th>
+              <For each={UPCARDS}>
+                {(upcard) => {
+                  const code = () => props.table.code(row.key, upcard, game.rules.surrender);
+                  const cell = `${props.table.kind}-${row.key}-${upcard}`;
+                  return (
+                    <td classList={{ [code()]: true, hl: props.isHighlighted(cell) }}>{code()}</td>
+                  );
+                }}
+              </For>
+            </tr>
+          )}
+        </For>
+      </tbody>
+    </table>
   );
 }
 
 export function StrategyChart() {
   const isHighlighted = createSelector(() => game.lastCell);
+  const legend = () => LEGEND.filter(({ swatch }) => swatch !== 'r' || game.rules.surrender);
+
+  createEffect(() => {
+    if (openDrawer() === 'chart') {
+      document.querySelector('td.hl')?.scrollIntoView({ block: 'nearest' });
+    }
+  });
 
   return (
-    <details class="panel" open>
-      <summary>
-        <h3>Strategy chart</h3>
-      </summary>
+    <div class="chart-panel">
       <p class="sub">Your last decision is outlined. Rows are your hand, columns the dealer's upcard.</p>
       <div class="legend">
-        <For each={LEGEND}>
+        <For each={legend()}>
           {({ swatch, text }) => (
             <span>
               <i style={{ background: `var(--c-${swatch})` }} />
@@ -114,9 +114,7 @@ export function StrategyChart() {
           )}
         </For>
       </div>
-      <div class="charts">
-        <For each={TABLES}>{(table) => <Chart table={table} isHighlighted={isHighlighted} />}</For>
-      </div>
-    </details>
+      <For each={TABLES}>{(table) => <Chart table={table} isHighlighted={isHighlighted} />}</For>
+    </div>
   );
 }

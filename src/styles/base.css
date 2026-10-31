@@ -1,107 +1,266 @@
-/* One committed dark "baize" look. */
+/* Chunky pixel look: stepped corners, hard shadows, flat saturated colour. */
 :root {
-  --felt: #0c3229;
-  --felt-hi: #16503f;
-  --felt-line: rgba(233, 207, 140, 0.28);
-  --rail: #2b1b12;
-  --rail-hi: #4a2f1f;
-  --brass: #d6b25e;
-  --brass-dim: #a98a45;
-  --ivory: #f4ecd8;
-  --muted: #a9b8ae;
-  --page: #0a1714;
-  --panel: #10221d;
-  --panel-2: #16302a;
-  --line: rgba(244, 236, 216, 0.12);
-  --card: #fbf7ec;
-  --ink: #1d1a16;
-  --suit-red: #b3262d;
-  --good: #7fd19b;
-  --bad: #f08f72;
+  --page: #10201f;
+  --panel: #2a3c40;
+  --panel-hi: #40565a;
+  --panel-dark: #17252a;
+  --edge: #0b1416;
+  --felt: #2a7a5e;
+  --felt-dark: #1d5a45;
+  --text: #fdf8ea;
+  --muted: #a7bdb8;
+
+  --blue: #009dff;
+  --red: #fe5f55;
+  --gold: #fda200;
+  --green: #4bc292;
+  --purple: #8a71e1;
+  --money: #f7c948;
 
   /* Strategy codes, shared by the chart and the action buttons. */
-  --c-h: #3b4a45;
-  --c-s: #d9cba3;
-  --c-d: #d6b25e;
-  --c-ds: #b88a3c;
-  --c-p: #4f9e94;
-  --c-r: #c4644f;
+  --c-h: var(--blue);
+  --c-s: var(--red);
+  --c-d: var(--gold);
+  --c-ds: #c67a00;
+  --c-p: var(--green);
+  --c-r: var(--purple);
 
-  --f-display: 'Limelight', 'Didot', Georgia, serif;
-  --f-body: 'Figtree', system-ui, -apple-system, 'Segoe UI', sans-serif;
-  --f-mono: 'JetBrains Mono', ui-monospace, Menlo, monospace;
+  /* Size of one chunky pixel. */
+  --px: 3px;
 
-  /* Card width. */
-  --cw: clamp(50px, 13vw, 68px);
+  --f-pixel: 'Jersey 10', ui-monospace, Menlo, monospace;
+
+  --ink: #1d1a16;
+
+  /* Card width. Sprites are 90 wide, so whole multiples of that stay crisp on any screen. */
+  --cw: 180px;
 
   color-scheme: dark;
   box-sizing: border-box;
-  padding-top: env(safe-area-inset-top, 0px);
-  padding-bottom: env(safe-area-inset-bottom, 0px);
-}
-
-html {
-  scroll-padding-top: env(safe-area-inset-top, 0px);
 }
 
 html,
 body {
   background: var(--page);
-  color: var(--ivory);
+  color: var(--text);
 }
 
 body {
   margin: 0;
-  font-family: var(--f-body);
-  font-size: 15px;
-  line-height: 1.45;
-  padding-left: max(16px, env(safe-area-inset-left, 0px));
-  padding-right: max(16px, env(safe-area-inset-right, 0px));
-  padding-block: 20px 48px;
+  font-family: var(--f-pixel);
+  font-size: 22px;
+  line-height: 1.1;
+  letter-spacing: 0.02em;
+  -webkit-font-smoothing: none;
+  font-smooth: never;
 }
 
-.wrap {
-  max-width: 760px;
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+  font-weight: 400;
 }
 
 button {
   font: inherit;
+  letter-spacing: inherit;
   color: inherit;
   cursor: pointer;
 }
 
 button:focus-visible {
-  outline: 2px solid var(--ivory);
-  outline-offset: 2px;
+  outline: var(--px) solid var(--text);
+  outline-offset: calc(var(--px) * 2);
 }
 
-.panel {
-  background: var(--panel);
-  border: 1px solid var(--line);
-  border-radius: 14px;
-  padding: 14px;
+kbd {
+  font: inherit;
 }
 
-.panel h3 {
-  margin: 0 0 4px;
-  font-family: var(--f-display);
-  font-weight: 400;
+/* A flat box with stepped corners, drawn by four hard shadows. */
+.px-box {
+  --box: var(--panel);
+  --box-edge: var(--panel-hi);
+  background: var(--box);
+  box-shadow:
+    0 calc(var(--px) * -1) 0 var(--box-edge),
+    0 var(--px) 0 var(--box-edge),
+    calc(var(--px) * -1) 0 0 var(--box-edge),
+    var(--px) 0 0 var(--box-edge),
+    0 calc(var(--px) * 3) 0 var(--edge);
+}
+
+/* A chunky button with a darker lip along the bottom that it presses into. */
+.px-btn {
+  --btn: var(--panel-hi);
+  --btn-face: var(--btn);
+  --btn-lip: color-mix(in srgb, var(--btn) 58%, black);
+  border: 0;
+  background: var(--btn-face);
+  color: var(--text);
+  text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.45);
+  box-shadow:
+    0 calc(var(--px) * -1) 0 var(--btn-face),
+    calc(var(--px) * -1) 0 0 var(--btn-face),
+    var(--px) 0 0 var(--btn-face),
+    0 var(--px) 0 var(--btn-face),
+    0 calc(var(--px) * 3) 0 var(--btn-lip);
+}
+
+/* Changes the colour rather than using a filter, which would lift the button over its neighbours. */
+.px-btn:hover:not(:disabled) {
+  --btn-face: color-mix(in srgb, var(--btn) 86%, white);
+}
+
+.px-btn:active:not(:disabled) {
+  transform: translateY(calc(var(--px) * 2));
+  box-shadow:
+    0 calc(var(--px) * -1) 0 var(--btn-face),
+    calc(var(--px) * -1) 0 0 var(--btn-face),
+    var(--px) 0 0 var(--btn-face),
+    0 var(--px) 0 var(--btn-face);
+}
+
+.px-btn:disabled {
+  --btn: #2b3a3d;
+  color: #71868a;
+  text-shadow: none;
+  cursor: default;
+}
+
+.section-title {
+  color: var(--money);
+  font-size: 28px;
+  text-shadow: 2px 2px 0 var(--edge);
+}
+
+.sub {
+  color: var(--muted);
   font-size: 20px;
-  color: var(--brass);
 }
 
-.panel .sub {
-  margin: 0 0 12px;
-  font-size: 12px;
+.lbl {
+  font-size: 20px;
   color: var(--muted);
 }
 
-.grid2 {
+/* HUD on the left, stage on the right. Drawers pull out over the far edge. */
+.layout {
+  position: relative;
+  z-index: 1;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  grid-template-columns: 250px minmax(0, 1fr);
+  gap: 20px;
+  max-width: 1120px;
+  min-height: 100dvh;
+  margin: 0 auto;
+  padding: 12px 64px 14px 20px;
+  box-sizing: border-box;
+}
+
+.hud,
+.stage {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+
+.stage {
   gap: 14px;
+}
+
+/* The HUD scrolls on its own, so it can never push the moves off the bottom of the window. */
+@media (min-width: 1024px) {
+  .layout {
+    height: 100dvh;
+  }
+
+  .hud {
+    overflow-y: auto;
+    scrollbar-width: none;
+    margin: -3px;
+    padding: 3px;
+  }
+}
+
+/* With room to spare, the game moves aside so its controls stay usable beside a drawer. */
+@media (min-width: 1180px) {
+  .layout.drawer-open {
+    max-width: none;
+    margin: 0;
+    padding-right: 510px;
+  }
+
+}
+
+
+/* Narrower screens can't fit doubled cards. These sizes land on whole device pixels on most tablets and phones. */
+@media (max-width: 1179px) {
+  :root {
+    --cw: 135px;
+  }
+}
+
+@media (max-width: 1023px) {
+  :root {
+    --cw: 120px;
+  }
+}
+
+/* Two rows of cards need the height, so shorter windows step down a sprite multiple. */
+@media (min-width: 1024px) and (max-height: 869px) {
+  :root {
+    --cw: 135px;
+  }
+}
+
+@media (min-width: 1024px) and (max-height: 749px) {
+  :root {
+    --cw: 90px;
+  }
+}
+
+@media (max-width: 1023px) {
+  .layout {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: max(10px, env(safe-area-inset-top, 0px)) 14px calc(76px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .hud,
+  .stage {
+    display: contents;
+  }
+
+  .layout .stats-header {
+    order: 1;
+  }
+
+  .layout .table {
+    order: 2;
+  }
+
+  .layout .verdict-pop {
+    order: 3;
+  }
+
+  /* Pinned above the tab bar, so the moves stay in reach however tall the table gets. */
+  .layout .controls {
+    order: 4;
+    position: sticky;
+    bottom: calc(64px + env(safe-area-inset-bottom, 0px));
+    z-index: 5;
+  }
+
+  .layout .betbar {
+    order: 5;
+  }
+
+  .layout .foot {
+    order: 6;
+  }
 }

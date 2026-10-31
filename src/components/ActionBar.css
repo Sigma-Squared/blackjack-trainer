@@ -1,89 +1,97 @@
+/* Holds the row at one height, so swapping controls doesn't move the page. */
+.controls {
+  display: grid;
+  min-height: 70px;
+  padding-bottom: 9px;
+  box-sizing: border-box;
+}
+
 .actions {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 8px;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  gap: 12px;
 }
 
 .ins {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 8px;
+  gap: 12px;
 }
 
 .act {
-  background: var(--panel-2);
-  border: 1px solid var(--line);
-  border-radius: 10px;
-  padding: 12px 4px 10px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2px;
-  font-weight: 600;
-  font-size: 14px;
-  transition:
-    transform 0.08s,
-    background 0.15s,
-    border-color 0.15s;
+  justify-content: center;
+  gap: 1px;
+  min-width: 0;
+  padding: 7px 2px 6px;
+  font-size: 26px;
+  line-height: 1;
+}
+
+.act:not(:disabled) {
+  --btn: var(--action);
 }
 
 .act kbd {
-  font-family: var(--f-mono);
-  font-size: 10px;
-  color: var(--muted);
-  font-weight: 500;
+  font-size: 18px;
+  opacity: 0.7;
 }
 
-.act:hover:not(:disabled) {
-  background: #1d3c34;
-  border-color: var(--brass-dim);
+.act.take {
+  --action: var(--red);
 }
 
-.act:active:not(:disabled) {
-  transform: translateY(1px);
-}
-
-.act:disabled {
-  opacity: 0.32;
-  cursor: default;
+.act.decline {
+  --action: var(--blue);
 }
 
 .act.rec {
-  border-color: var(--brass);
-  box-shadow: 0 0 0 2px rgba(214, 178, 94, 0.35);
+  outline: var(--px) solid var(--text);
+  outline-offset: var(--px);
+  animation: recommend 0.9s steps(2) infinite;
 }
 
-.act .sw {
-  width: 22px;
-  height: 4px;
-  border-radius: 2px;
-  margin-bottom: 4px;
+@keyframes recommend {
+  50% {
+    outline-color: var(--money);
+  }
 }
 
 .deal {
+  --btn: var(--green);
   width: 100%;
-  background: var(--brass);
-  color: var(--ink);
-  border: 0;
-  border-radius: 10px;
-  padding: 14px;
-  font-weight: 700;
-  font-size: 16px;
-  letter-spacing: 0.02em;
-}
-
-.deal:hover {
-  filter: brightness(1.07);
+  padding: 10px;
+  font-size: 32px;
 }
 
 .deal-key {
-  opacity: 0.6;
-  font-weight: 500;
+  margin-left: 6px;
+  font-size: 22px;
+  opacity: 0.7;
 }
 
 @media (max-width: 420px) {
+  .actions {
+    gap: 8px;
+  }
+
+  /* The fifth column holds "Surrender". */
+  .actions:has(.act:nth-child(5)) {
+    grid-template-columns: repeat(4, 1fr) 1.25fr;
+  }
+
   .act {
-    font-size: 13px;
-    padding: 11px 2px 9px;
+    padding-inline: 0;
+    font-size: 18px;
+    letter-spacing: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .act.rec {
+    animation: none;
   }
 }

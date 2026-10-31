@@ -1,0 +1,67 @@
+.rule-settings {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  width: 100%;
+  margin-top: 10px;
+}
+
+.rule {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  color: var(--text);
+}
+
+/* Exactly the width of two buttons' side edges, so the pair meets in the middle. */
+.pill {
+  display: flex;
+  gap: calc(var(--px) * 2);
+}
+
+/* Square off the corners where the pair meets, and run the lip unbroken beneath them. */
+.pill .rule-toggle:first-child {
+  box-shadow:
+    0 calc(var(--px) * -1) 0 var(--btn-face),
+    calc(var(--px) * -1) 0 0 var(--btn-face),
+    var(--px) 0 0 var(--btn-face),
+    0 var(--px) 0 var(--btn-face),
+    var(--px) calc(var(--px) * -1) 0 var(--btn-face),
+    var(--px) var(--px) 0 var(--btn-face),
+    0 calc(var(--px) * 3) 0 var(--btn-lip),
+    var(--px) calc(var(--px) * 3) 0 var(--btn-lip);
+}
+
+.pill .rule-toggle:last-child {
+  box-shadow:
+    0 calc(var(--px) * -1) 0 var(--btn-face),
+    calc(var(--px) * -1) 0 0 var(--btn-face),
+    var(--px) 0 0 var(--btn-face),
+    0 var(--px) 0 var(--btn-face),
+    calc(var(--px) * -1) calc(var(--px) * -1) 0 var(--btn-face),
+    calc(var(--px) * -1) var(--px) 0 var(--btn-face),
+    0 calc(var(--px) * 3) 0 var(--btn-lip),
+    calc(var(--px) * -1) calc(var(--px) * 3) 0 var(--btn-lip);
+}
+
+/* Pressing darkens instead of sinking, which would pull the pair apart. */
+.pill .rule-toggle:active:not(:disabled) {
+  --btn-face: color-mix(in srgb, var(--btn) 86%, black);
+  transform: none;
+}
+
+.rule-toggle {
+  min-width: 46px;
+  padding: 1px 6px 2px;
+  font-size: 22px;
+}
+
+.rule-toggle[aria-pressed='true'] {
+  --btn: var(--green);
+}
+
+.rule-toggle[aria-pressed='true']:disabled {
+  --btn: var(--panel-hi);
+  color: var(--text);
+}

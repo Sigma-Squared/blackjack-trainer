@@ -1,54 +1,109 @@
-header {
+.stats-header {
   display: flex;
-  flex-wrap: wrap;
-  align-items: flex-end;
-  justify-content: space-between;
+  flex-direction: column;
   gap: 12px;
 }
 
+.title {
+  padding: 8px 12px;
+  text-align: center;
+}
+
 h1 {
-  font-family: var(--f-display);
-  font-weight: 400;
-  font-size: clamp(26px, 6vw, 36px);
-  line-height: 1;
-  margin: 0;
-  color: var(--brass);
-  letter-spacing: 0.01em;
+  font-size: 31px;
+  line-height: 0.9;
+  color: var(--money);
+  text-shadow: 3px 3px 0 var(--edge);
   text-wrap: balance;
 }
 
-.rules {
-  margin: 6px 0 0;
-  font-size: 12px;
+.tallies {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px 14px;
+}
+
+.tally {
+  --box: var(--panel-dark);
+  padding: 6px 8px 8px;
+  text-align: center;
+}
+
+.tally span {
+  font-size: 18px;
   color: var(--muted);
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
 }
 
-.chips {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-.chip {
-  background: var(--panel);
-  border: 1px solid var(--line);
-  border-radius: 10px;
-  padding: 6px 10px;
-  min-width: 74px;
-}
-
-.chip b {
+.tally b {
   display: block;
-  font-family: var(--f-mono);
-  font-size: 16px;
-  font-variant-numeric: tabular-nums;
+  margin-top: 4px;
+  padding: 3px 4px 4px;
+  font-size: 34px;
+  font-weight: 400;
+  line-height: 1;
+  color: var(--text);
+  background: var(--tally);
+  text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.45);
 }
 
-.chip span {
-  font-size: 10px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--muted);
+.accuracy {
+  --tally: var(--blue);
+}
+
+.streak {
+  --tally: var(--red);
+}
+
+.bankroll {
+  --tally: var(--panel);
+  grid-column: 1 / -1;
+}
+
+.bankroll b {
+  color: var(--money);
+  font-size: 30px;
+}
+
+@media (max-width: 1023px) {
+  .stats-header {
+    gap: 10px;
+  }
+
+  .title {
+    padding: 4px 8px 5px;
+  }
+
+  h1 {
+    font-size: 30px;
+  }
+
+  .tallies {
+    grid-template-columns: 1fr 1fr 1.4fr;
+    gap: 8px 10px;
+  }
+
+  .tally {
+    padding: 3px 5px 5px;
+  }
+
+  .tally span {
+    font-size: 16px;
+  }
+
+  .tally b,
+  .bankroll b {
+    margin-top: 2px;
+    font-size: 26px;
+  }
+
+  .bankroll {
+    grid-column: auto;
+  }
+}
+
+/* Phones spend the title's height on the cards and the verdict instead. */
+@media (max-width: 500px) {
+  .title {
+    display: none;
+  }
 }

@@ -20,7 +20,7 @@ export function ConfirmButton(props: { label: string; onConfirm: () => void }) {
   }
 
   return (
-    <button class="ghost" classList={{ warn: armed() }} onClick={handleClick}>
+    <button class="confirm px-btn" classList={{ warn: armed() }} onClick={handleClick}>
       {armed() ? 'Tap again to confirm' : props.label}
     </button>
   );

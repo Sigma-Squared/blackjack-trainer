@@ -1,37 +1,38 @@
+.drawer-section {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
 .bars {
   display: grid;
   gap: 8px;
+  margin-top: 6px;
 }
 
 .bar {
   display: grid;
-  grid-template-columns: 72px 1fr 64px;
+  grid-template-columns: 90px 1fr 92px;
   gap: 8px;
   align-items: center;
-  font-size: 13px;
+  font-size: 20px;
 }
 
 .bar .track {
-  height: 8px;
-  background: var(--panel-2);
-  border-radius: 4px;
-  overflow: hidden;
+  height: 14px;
+  background: var(--edge);
 }
 
+/* Cut into blocks, like a health bar. */
 .bar .fill {
   height: 100%;
-  background: var(--brass);
-  border-radius: 4px;
+  background: repeating-linear-gradient(90deg, var(--green) 0 9px, transparent 9px 12px);
 }
 
 .bar .v {
-  font-family: var(--f-mono);
-  font-size: 12px;
   text-align: right;
-  color: var(--muted);
-  font-variant-numeric: tabular-nums;
 }
 
 .bar .count {
-  opacity: 0.6;
+  color: var(--muted);
 }

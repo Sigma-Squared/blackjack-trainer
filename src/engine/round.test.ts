@@ -1,11 +1,23 @@
 import { describe, expect, it } from 'vitest';
 import { totalLabel } from './cards';
-import { answerInsurance, deal, newGame, playAction, rebuy, resetStats } from './round';
-import type { Card, GameState, Rank } from './types';
+import {
+  allowedForCurrentHand,
+  answerInsurance,
+  deal,
+  newGame,
+  playAction,
+  rebuy,
+  resetStats,
+  setBlackjackPayout,
+  setInsurance,
+  setSurrender,
+} from './round';
+import type { Card, GameState, Rank, Rules } from './types';
 
 /** A game whose shoe deals these ranks in order: player, dealer, player, dealer, then draws. */
 function stackedGame(...ranks: Rank[]): GameState {
-  const game = newGame({ bankroll: 1000, bet: 100 });
+  const rules: Rules = { surrender: true, blackjackPayout: '3:2', insurance: true };
+  const game = newGame({ bankroll: 1000, bet: 100, rules });
   const filler: Card[] = Array.from({ length: 50 }, () => ({ rank: '2', suit: '♣' }));
   const stacked: Card[] = ranks.map((rank) => ({ rank, suit: '♠' }));
   game.shoe = [...filler, ...stacked.reverse()];
@@ -47,6 +59,68 @@ describe('payouts', () => {
     expect(game.hands[0].bet).toBe(200);
     expect(game.hands[0].result).toBe('win');
     expect(game.bankroll).toBe(1200);
+  });
+});
+
+describe('rules', () => {
+  it('pays a blackjack 6 to 5 when set', () => {
+    const game = stackedGame('A', '9', 'K', '7');
+    setBlackjackPayout(game, '6:5');
+    deal(game);
+    expect(game.bankroll).toBe(1120);
+    expect(game.message).toContain('Paid 6 to 5.');
+    expect(game.message).toContain('Round: +$120.');
+  });
+
+  it('still pays a 6 to 5 game even money on a normal win', () => {
+    const game = stackedGame('10', '6', '9', '10', '10');
+    setBlackjackPayout(game, '6:5');
+    deal(game);
+    playAction(game, 'S');
+    expect(game.bankroll).toBe(1100);
+  });
+
+  it('refuses surrender when it is off, and grades the fallback as correct', () => {
+    const game = stackedGame('10', '10', '6', '7', '10');
+    setSurrender(game, false);
+    deal(game);
+    expect(allowedForCurrentHand(game).R).toBe(false);
+    playAction(game, 'R');
+    expect(game.hands[0].result).toBeNull();
+    expect(game.stats.n).toBe(0);
+
+    playAction(game, 'H');
+    expect(game.verdict?.correct).toBe(true);
+    expect(game.verdict?.best).toBe('H');
+  });
+
+  it('skips the insurance offer when it is off, but the dealer still checks for blackjack', () => {
+    const game = stackedGame('10', 'A', '9', '6');
+    setInsurance(game, false);
+    deal(game);
+    expect(game.phase).toBe('play');
+    expect(game.stats.cat.ins).toEqual([0, 0]);
+
+    const beaten = stackedGame('10', 'A', '9', 'K');
+    setInsurance(beaten, false);
+    deal(beaten);
+    expect(beaten.phase).toBe('done');
+    expect(beaten.hands[0].result).toBe('lose');
+    expect(beaten.bankroll).toBe(900);
+  });
+
+  it('drops an open insurance offer ungraded when turned off', () => {
+    const game = stackedGame('10', 'A', '9', '6');
+    deal(game);
+    expect(game.phase).toBe('insurance');
+    setInsurance(game, false);
+    expect(game.phase).toBe('play');
+    expect(game.stats.n).toBe(0);
+    expect(game.bankroll).toBe(900);
+  });
+
+  it('starts with surrender off, blackjack paying 3 to 2 and insurance offered', () => {
+    expect(newGame().rules).toEqual({ surrender: false, blackjackPayout: '3:2', insurance: true });
   });
 });
 
@@ -138,6 +212,20 @@ describe('grading', () => {
     expect(next.stats.log).toEqual([{ label: 'Hard 17 vs 6', choice: 'H', best: 'S' }]);
     expect(next.verdict?.correct).toBe(false);
     expect(next.lastCell).toBe('hard-17-6');
+  });
+
+  it('marks the verdict stale on the next deal until a new decision', () => {
+    const game = stackedGame('10', '6', '7', '10', '10', '10', '6', '7', '10', '10');
+    deal(game);
+    playAction(game, 'S');
+    expect(game.verdictStale).toBe(false);
+
+    deal(game);
+    expect(game.verdictStale).toBe(true);
+    expect(game.verdict).not.toBeNull();
+
+    playAction(game, 'S');
+    expect(game.verdictStale).toBe(false);
   });
 
   it('resets the stats and verdict', () => {
