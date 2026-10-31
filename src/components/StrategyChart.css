@@ -1,0 +1,140 @@
+details summary {
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+details summary::-webkit-details-marker {
+  display: none;
+}
+
+details summary::after {
+  content: 'Hide';
+  font-size: 12px;
+  color: var(--muted);
+}
+
+details:not([open]) summary::after {
+  content: 'Show';
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 12px;
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+
+.legend span {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.legend i {
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+  display: inline-block;
+}
+
+.charts {
+  display: grid;
+  gap: 14px;
+}
+
+.tw {
+  overflow-x: auto;
+}
+
+table.chart {
+  border-collapse: separate;
+  border-spacing: 2px;
+  font-family: var(--f-mono);
+  font-size: 11px;
+  margin: 0 auto;
+}
+
+table.chart caption {
+  text-align: left;
+  font-family: var(--f-body);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding-bottom: 4px;
+}
+
+table.chart th {
+  color: var(--muted);
+  font-weight: 500;
+  padding: 0 4px;
+  min-width: 24px;
+  height: 22px;
+}
+
+table.chart th[scope='row'] {
+  text-align: right;
+  padding-right: 6px;
+  white-space: nowrap;
+}
+
+table.chart td {
+  width: 28px;
+  height: 22px;
+  text-align: center;
+  border-radius: 3px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+td.H {
+  background: var(--c-h);
+  color: var(--ivory);
+}
+
+td.S {
+  background: var(--c-s);
+}
+
+td.D {
+  background: var(--c-d);
+}
+
+td.Ds {
+  background: var(--c-ds);
+}
+
+td.P {
+  background: var(--c-p);
+  color: var(--ivory);
+}
+
+td.R {
+  background: var(--c-r);
+  color: var(--ivory);
+}
+
+td.hl {
+  outline: 2px solid var(--ivory);
+  outline-offset: 1px;
+  position: relative;
+  z-index: 1;
+  animation: pulse 1.2s ease 2;
+}
+
+@keyframes pulse {
+  50% {
+    outline-color: transparent;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  td.hl {
+    animation: none;
+  }
+}

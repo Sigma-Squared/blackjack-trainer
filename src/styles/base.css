@@ -1,0 +1,107 @@
+/* One committed dark "baize" look. */
+:root {
+  --felt: #0c3229;
+  --felt-hi: #16503f;
+  --felt-line: rgba(233, 207, 140, 0.28);
+  --rail: #2b1b12;
+  --rail-hi: #4a2f1f;
+  --brass: #d6b25e;
+  --brass-dim: #a98a45;
+  --ivory: #f4ecd8;
+  --muted: #a9b8ae;
+  --page: #0a1714;
+  --panel: #10221d;
+  --panel-2: #16302a;
+  --line: rgba(244, 236, 216, 0.12);
+  --card: #fbf7ec;
+  --ink: #1d1a16;
+  --suit-red: #b3262d;
+  --good: #7fd19b;
+  --bad: #f08f72;
+
+  /* Strategy codes, shared by the chart and the action buttons. */
+  --c-h: #3b4a45;
+  --c-s: #d9cba3;
+  --c-d: #d6b25e;
+  --c-ds: #b88a3c;
+  --c-p: #4f9e94;
+  --c-r: #c4644f;
+
+  --f-display: 'Limelight', 'Didot', Georgia, serif;
+  --f-body: 'Figtree', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --f-mono: 'JetBrains Mono', ui-monospace, Menlo, monospace;
+
+  /* Card width. */
+  --cw: clamp(50px, 13vw, 68px);
+
+  color-scheme: dark;
+  box-sizing: border-box;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+html {
+  scroll-padding-top: env(safe-area-inset-top, 0px);
+}
+
+html,
+body {
+  background: var(--page);
+  color: var(--ivory);
+}
+
+body {
+  margin: 0;
+  font-family: var(--f-body);
+  font-size: 15px;
+  line-height: 1.45;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 20px 48px;
+}
+
+.wrap {
+  max-width: 760px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+
+button:focus-visible {
+  outline: 2px solid var(--ivory);
+  outline-offset: 2px;
+}
+
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 14px;
+}
+
+.panel h3 {
+  margin: 0 0 4px;
+  font-family: var(--f-display);
+  font-weight: 400;
+  font-size: 20px;
+  color: var(--brass);
+}
+
+.panel .sub {
+  margin: 0 0 12px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.grid2 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 14px;
+}

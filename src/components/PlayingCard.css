@@ -1,0 +1,83 @@
+.card {
+  width: var(--cw);
+  aspect-ratio: 5/7;
+  max-width: 100%;
+  background: var(--card);
+  color: var(--ink);
+  border-radius: 7px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.45);
+  position: relative;
+  font-family: var(--f-mono);
+  font-weight: 700;
+  flex: none;
+}
+
+.card.red {
+  color: var(--suit-red);
+}
+
+.card .cr {
+  position: absolute;
+  top: 4px;
+  left: 5px;
+  font-size: calc(var(--cw) * 0.24);
+  line-height: 0.95;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.card .cr i {
+  font-style: normal;
+  font-size: 0.8em;
+}
+
+.card .cr.br {
+  top: auto;
+  left: auto;
+  bottom: 4px;
+  right: 5px;
+  transform: rotate(180deg);
+}
+
+.card .cs {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-size: calc(var(--cw) * 0.48);
+  font-family: var(--f-body);
+}
+
+.card.back {
+  background: repeating-linear-gradient(45deg, #7b1e24 0 5px, #8f2a2f 5px 10px);
+  border: 3px solid var(--card);
+}
+
+.card.new {
+  animation: dealIn 0.32s cubic-bezier(0.2, 0.8, 0.3, 1) backwards;
+}
+
+.card.flip {
+  animation: flip 0.35s ease backwards;
+}
+
+@keyframes dealIn {
+  from {
+    transform: translate(40px, -60px) rotate(8deg);
+    opacity: 0;
+  }
+}
+
+@keyframes flip {
+  from {
+    transform: rotateY(90deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card.new,
+  .card.flip {
+    animation: none;
+  }
+}

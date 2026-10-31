@@ -1,0 +1,73 @@
+.betbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.betchips {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.betchips .lbl {
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.pchip {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 3px dashed rgba(255, 255, 255, 0.55);
+  font-family: var(--f-mono);
+  font-weight: 700;
+  font-size: 13px;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.4);
+}
+
+.pchip-10 {
+  background: #2f5d9a;
+}
+
+.pchip-25 {
+  background: #2d7a4b;
+}
+
+.pchip-50 {
+  background: #a3412f;
+}
+
+.pchip-100 {
+  background: #1f1f1f;
+}
+
+.pchip.on {
+  outline: 2px solid var(--brass);
+  outline-offset: 3px;
+}
+
+.toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--muted);
+  background: none;
+  border: 1px solid var(--line);
+  border-radius: 99px;
+  padding: 6px 12px;
+}
+
+.toggle[aria-pressed='true'] {
+  color: var(--ink);
+  background: var(--brass);
+  border-color: var(--brass);
+}

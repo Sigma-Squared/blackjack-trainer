@@ -1,0 +1,37 @@
+.bars {
+  display: grid;
+  gap: 8px;
+}
+
+.bar {
+  display: grid;
+  grid-template-columns: 72px 1fr 64px;
+  gap: 8px;
+  align-items: center;
+  font-size: 13px;
+}
+
+.bar .track {
+  height: 8px;
+  background: var(--panel-2);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.bar .fill {
+  height: 100%;
+  background: var(--brass);
+  border-radius: 4px;
+}
+
+.bar .v {
+  font-family: var(--f-mono);
+  font-size: 12px;
+  text-align: right;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.bar .count {
+  opacity: 0.6;
+}

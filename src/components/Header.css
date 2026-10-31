@@ -1,0 +1,54 @@
+header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+h1 {
+  font-family: var(--f-display);
+  font-weight: 400;
+  font-size: clamp(26px, 6vw, 36px);
+  line-height: 1;
+  margin: 0;
+  color: var(--brass);
+  letter-spacing: 0.01em;
+  text-wrap: balance;
+}
+
+.rules {
+  margin: 6px 0 0;
+  font-size: 12px;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.chips {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.chip {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 6px 10px;
+  min-width: 74px;
+}
+
+.chip b {
+  display: block;
+  font-family: var(--f-mono);
+  font-size: 16px;
+  font-variant-numeric: tabular-nums;
+}
+
+.chip span {
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
