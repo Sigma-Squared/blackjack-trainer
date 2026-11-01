@@ -45,4 +45,4 @@ Built with [Solid](https://www.solidjs.com/), TypeScript and [Vite](https://vite
 
 ## Credits
 
-Card art is [Pixel Plebes](https://greebles.itch.io/pixel-plebes) by Devlyn JD. The pixel font is [Jersey 10](https://fonts.google.com/specimen/Jersey+10).
+The design is inspired by Balatro. Card art is [Pixel Plebes](https://greebles.itch.io/pixel-plebes) by Devlyn JD. The pixel font is [Jersey 10](https://fonts.google.com/specimen/Jersey+10).
