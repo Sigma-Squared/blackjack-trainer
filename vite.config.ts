@@ -11,7 +11,7 @@ export default defineConfig({
       workbox: { globPatterns: ['**/*.{html,js,css,woff2,png,svg}'] },
       manifest: {
         name: 'Blackjack Trainer',
-        short_name: 'BJ Trainer',
+        short_name: 'BJT',
         description: 'Practice blackjack basic strategy, online or offline.',
         display: 'standalone',
         start_url: '/',

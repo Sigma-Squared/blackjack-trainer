@@ -264,3 +264,10 @@ kbd {
     order: 6;
   }
 }
+
+/* Installed on iOS, the page runs under the status bar, which also blurs the area just below it. */
+@media (max-width: 1023px) and (display-mode: standalone) {
+  .layout {
+    padding-top: calc(env(safe-area-inset-top, 0px) + 28px);
+  }
+}
